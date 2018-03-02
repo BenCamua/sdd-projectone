@@ -1,0 +1,40 @@
+What Classes Do I Need???
+
+Friday, March 2, 2018
+12:28 PM
+
+Import random
+list1=[1,2,3]
+randomnumber=random.choice(list1)
+print(randomnumber)
+
+Player will need:
+	• A name.
+	• An age.
+		○ <20>19
+	• An alignment
+		○ Good
+		○ Evil
+	• An inventory 
+		○ Gold
+		○ Items
+	• Health
+		○ 0 - 100
+
+Mob1
+	• Name
+		○ Grabs a random one
+	• Race
+		○ Grabs a random one and changes stats
+	• Weapon
+		○ Grabs a random one and changes stats
+	• Inventory
+		○ Depends on race and weapon and name
+	• Health
+		○ Dependant on inventory
+
+2 choices for player to make to affect outcome and end of game.
+	• Choice at start determines what mob1 will be
+	• Choice to mercy or to not will determine what ending will be
+	
+01:03PM 2/3/2018

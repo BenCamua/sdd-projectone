@@ -25,10 +25,10 @@ def title_art():
     print('   )_(   |/     \||_/    \/(_______/     )_(   |/     \|(_______/     )_(   |/   \__/\_______/|/     \|(_______/')
     print('')
 
+
 # function to start the game
 def game_start():
     # Creates The Player
-    player1 = Player()
     title_art()
     input('')
     print('')
@@ -46,6 +46,7 @@ def game_start():
     print('A piece of paper with a wall of nonsensical text is written on it')
     print('A small area titled "Name?" ')
     print('')
+# Names the player
     player1.name_player()
     print('')
     print('')
@@ -72,6 +73,7 @@ def room_1():
         print('4) Open the Door')
         print('')
         userChoice = input("")
+# Dagger pickup prompt
         if userChoice == '1':
             if dagger == 0:
                 print('You look around the various cabinets, dressers and crates around the room,')
@@ -79,29 +81,81 @@ def room_1():
                 print('from the wall.')
                 x = input('Do you take it? \n 1) Yes \n 2) No\n')
                 if x == '1':
-                    Player.add_inventory(Player, "Orchish Dagger")
+                    player1.add_inventory("Orchish Dagger")
                     print('Item Added, Orcish Dagger')
                     dagger = 1
                 elif x == '2':
                     print('You leave the dagger on the wall.')
+                    print('')
+            elif dagger == 2:
+                print('You trip over the dagger that you dropped earlier.')
+                x2 = input('Do you take it? \n 1) Yes \n 2) No\n')
+                if x2 == '1':
+                    player1.add_inventory("Orchish Dagger")
+                    print('Item Added, Orcish Dagger')
+                    dagger = 1
+                elif x2 == '2':
+                    print('You leave the dagger on the floor')
                     print('')
             else:
                 print('')
                 print("The room looks like it's part of a wooden lodge. There is a table with various items on it and ")
                 print("a wooden door with a lock.")
                 print('')
+# Open inventory prompt
         elif userChoice == '2':
-            print(Player.inventory)
+            print(player1.inventory)
             print('')
-            print(Player.name + "'s Inventory.")
+            print(player1.name + "'s Inventory.")
             print('1) Drop an Item')
             print('2) Use an Item')
             print('3) Close Inventory')
             y = input('')
-            if y == '3':
+            if y == '1':
+                if len(player1.inventory) == 0:
+                    print('')
+                    print('You have nothing to drop!')
+                    print('')
+                else:
+                    print('What item do you want to drop?' )
+                    for b in player1.inventory:
+                        num = 0
+                        num += 1
+                        num = str(num)
+                        print(num+') ' + b)
+                        num = int(num)
+                    dropchoice = input('')
+                    dropchoice = int(dropchoice)
+                    if dropchoice > len(player1.inventory):
+                        print('')
+                        print('There is nothing there!')
+                    elif dropchoice < len(player1.inventory):
+                        print('')
+                        print('There is nothing there!')
+                    else:
+                        dropchoice -= 1
+                        del player1.inventory[dropchoice]
+                        print('')
+                        print('You drop the dagger onto the floor.')
+                        dagger = 2
+            elif y == '2':
+                print('')
+                print('You have no item to use!')
+            elif y == '3':
+                print('')
                 print('Inventory Closed.')
 
+# Go to the table
+        if userChoice == '3':
+            print('You got to the table and on it are 2 items, A cast iron Key and a Red Potion')
+            take = input('Do you take the items? \n1) Yes\n2) No')
+            if take == 1:
+                print('')
+                take1 = input('Which items do you take')
 
+
+
+player1 = Player()
 game_start()
 room_1()
 

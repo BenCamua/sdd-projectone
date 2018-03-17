@@ -12,16 +12,22 @@ class Player:
 
     def add_inventory(self, item):
         self.inventory.append(item)
-        print('Item Added! ')
-        print(self.inventory)
+
 
 
 def play():
-    player1.add_inventory(Player, "pickaxe")
+        player1.add_inventory(Player, "pickaxe")
+
+
+def drop():
+    for b in player1.inventory:
+        print(b)
+        input('')
+
 
 player1 = Player
-
-player1.name_player(Player)
+player1.name_player()
 play()
 player1.add_inventory(Player, "coin")
+drop()
 

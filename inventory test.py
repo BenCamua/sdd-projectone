@@ -1,18 +1,14 @@
-import time
-
-
 class Player:
-    health = 100
-    name = ''
-    alignment = ''
-    inventory = []
+    def __init__(self):
+        self.health = 100
+        self.name = ''
+        self.inventory = []
 
     def name_player(self):
         self.name = input('Enter your name? ')
 
     def add_inventory(self, item):
         self.inventory.append(item)
-
 
 
 def play():
@@ -25,9 +21,11 @@ def drop():
         input('')
 
 
+def name():
+    player1.name_player()
+
+
 player1 = Player
-player1.name_player()
-play()
-player1.add_inventory(Player, "coin")
-drop()
+name()
+
 

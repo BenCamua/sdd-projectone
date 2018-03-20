@@ -1,9 +1,10 @@
 
 class Player:
-    health = 100
-    name = ''
-    alignment = ''
-    inventory = []
+
+    def __init__(self):
+        self.health = 100
+        self.name = ''
+        self.inventory = []
 
     def name_player(self):
         self.name = input('Enter your name? ')
@@ -11,18 +12,80 @@ class Player:
     def add_inventory(self, item):
         self.inventory.append(item)
 
+    def check_inventory(self):
+        print(self.name + "'s Inventory")
+        print(self.inventory)
+        print('')
+        print('1) Drop an Item')
+        print('2) Use an Item')
+        print('3) Close Inventory')
+        choice = input('')
+        print('')
+        if choice == '1':
+            self.drop_item()
+        elif choice == '2':
+            print("There's nothing to use! ")
+
+    def drop_item(self, item):
+        if len(self.inventory) > 1:
+            for l in self.inventory:
+                x = 0
+                x += 1
+                x = str(x)
+                print('What Item do you want to drop?')
+                print(x + ') ' + l)
+        userChoice = input('')
+        userChoice = int(userChoice)
+        if 0 < userChoice <= len(self.inventory):
+            del self.inventory[userChoice - 1]
+            room.add_dropped(self.inventory(userChoice))
+
+
+class Table:
+    items = ["Brass Key", "Red Potion"]
+
+    def take_key(self):
+        keyIndex = self.items.index('Brass Key')
+        del self.items[keyIndex]
+
+    def take_pot(self):
+        potIndex = self.items.index("Red Potion")
+        del self.items[potIndex]
+
+    def show_table(self):
+        print('You approach the metal table, it is awkwardly placed in the room and does not match')
+        print('the style and decor of the room.')
+        print('')
+        if len(self.items) == 1:
+            print('There is a ' + self.items[0] + ' on the table.')
+        elif len(self.items) == 2:
+            print('There is a ' + self.items[0] + ' and a ' + self.items[1] + ' on the table.')
+        else:
+            print('There is nothing on the table.')
+
+
+class Room:
+    dropped = []
+
+    def add_dropped(self, item):
+        self.dropped.append(item)
+
+    def picked_up(self, item):
+        index = self.dropped.index(item)
+        del self.dropped[index]
+
 
 # ASCII title art
 def title_art():
     print('')
     print('_________ _______  _        _______   _________          _______   _________ _______ _________ _______  _       ')
-    print('\__   __/(  ___  )| \    /\(  ____ \  \__   __/|\     /|(  ____ \  \__   __/(  ____ )\__   __/(  ___  )( \      ')
-    print('   ) (   | (   ) ||  \  / /| (    \/     ) (   | )   ( || (    \/     ) (   | (    )|   ) (   | (   ) || (      ')
-    print('   | |   | (___) ||  (_/ / | (__         | |   | (___) || (__         | |   | (____)|   | |   | (___) || |      ')
-    print('   | |   |  ___  ||   _ (  |  __)        | |   |  ___  ||  __)        | |   |     __)   | |   |  ___  || |      ')
-    print('   | |   | (   ) ||  ( \ \ | (           | |   | (   ) || (           | |   | (\ (      | |   | (   ) || |      ')
-    print("   | |   | )   ( ||  /  \ \| (____/\     | |   | )   ( || (____/\     | |   | ) \ \_____) (___| )   ( || (____/\ ")
-    print('   )_(   |/     \||_/    \/(_______/     )_(   |/     \|(_______/     )_(   |/   \__/\_______/|/     \|(_______/')
+    print('\__   __/(  ___  )| \    /\(  ____ \   \__   __/|\     /|(  ____ \   \__   __/(  ____ )\__   __/(  ___  )( \      ')
+    print('   ) (   | (   ) ||  \  / /| (    \/      ) (   | )   ( || (    \/      ) (   | (    )|   ) (   | (   ) || (      ')
+    print('   | |   | (___) ||  (_/ / | (__          | |   | (___) || (__          | |   | (____)|   | |   | (___) || |      ')
+    print('   | |   |  ___  ||   _ (  |  __)         | |   |  ___  ||  __)         | |   |     __)   | |   |  ___  || |      ')
+    print('   | |   | (   ) ||  ( \ \ | (            | |   | (   ) || (            | |   | (\ (      | |   | (   ) || |      ')
+    print("   | |   | )   ( ||  /  \ \| (____/\      | |   | )   ( || (____/\      | |   | ) \ \_____) (___| )   ( || (____/\ ")
+    print('   )_(   |/     \||_/    \/(_______/      )_(   |/     \|(_______/      )_(   |/   \__/\_______/|/     \|(_______/')
     print('')
 
 
@@ -50,6 +113,7 @@ def game_start():
     player1.name_player()
     print('')
     print('')
+
 
 # The First room First Choice.
 def room_1():
@@ -104,58 +168,25 @@ def room_1():
                 print('')
 # Open inventory prompt
         elif userChoice == '2':
-            print(player1.inventory)
-            print('')
-            print(player1.name + "'s Inventory.")
-            print('1) Drop an Item')
-            print('2) Use an Item')
-            print('3) Close Inventory')
-            y = input('')
-            if y == '1':
-                if len(player1.inventory) == 0:
-                    print('')
-                    print('You have nothing to drop!')
-                    print('')
-                else:
-                    print('What item do you want to drop?' )
-                    for b in player1.inventory:
-                        num = 0
-                        num += 1
-                        num = str(num)
-                        print(num+') ' + b)
-                        num = int(num)
-                    dropchoice = input('')
-                    dropchoice = int(dropchoice)
-                    if dropchoice > len(player1.inventory):
-                        print('')
-                        print('There is nothing there!')
-                    elif dropchoice < len(player1.inventory):
-                        print('')
-                        print('There is nothing there!')
-                    else:
-                        dropchoice -= 1
-                        del player1.inventory[dropchoice]
-                        print('')
-                        print('You drop the dagger onto the floor.')
-                        dagger = 2
-            elif y == '2':
-                print('')
-                print('You have no item to use!')
-            elif y == '3':
-                print('')
-                print('Inventory Closed.')
+            player1.check_inventory()
 
 # Go to the table
+        table = Table()
         if userChoice == '3':
-            print('You got to the table and on it are 2 items, A cast iron Key and a Red Potion')
-            take = input('Do you take the items? \n1) Yes\n2) No')
-            if take == 1:
-                print('')
-                take1 = input('Which items do you take')
+            table.show_table()
+            take = input('Do you take the Key? \n1) Yes\n2) No\n')
+            print('')
+            if take == '1':
+                print('You took the Key! ')
+                player1.add_inventory("Brass key")
+                table.take_key()
+
+            else:
+                print('You leave the key on the table')
 
 
-
-player1 = Player()
+room = Room()
+player1 = Player
 game_start()
 room_1()
 

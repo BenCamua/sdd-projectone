@@ -26,6 +26,6 @@ def name():
 
 
 player1 = Player
-name()
+player1
 
 

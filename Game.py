@@ -26,7 +26,7 @@ class Player:
         elif choice == '2':
             print("There's nothing to use! ")
 
-    def drop_item(self, item):
+    def drop_item(self):
         if len(self.inventory) > 1:
             for l in self.inventory:
                 x = 0
@@ -34,11 +34,11 @@ class Player:
                 x = str(x)
                 print('What Item do you want to drop?')
                 print(x + ') ' + l)
-        userChoice = input('')
-        userChoice = int(userChoice)
+        userChoice = int(input(''))
         if 0 < userChoice <= len(self.inventory):
             del self.inventory[userChoice - 1]
-            room.add_dropped(self.inventory(userChoice))
+            print(self.inventory[1])
+            room.add_dropped(self.inventory[userChoice])
 
 
 class Table:
@@ -77,16 +77,16 @@ class Room:
 
 # ASCII title art
 def title_art():
-    print('')
-    print('_________ _______  _        _______   _________          _______   _________ _______ _________ _______  _       ')
-    print('\__   __/(  ___  )| \    /\(  ____ \   \__   __/|\     /|(  ____ \   \__   __/(  ____ )\__   __/(  ___  )( \      ')
-    print('   ) (   | (   ) ||  \  / /| (    \/      ) (   | )   ( || (    \/      ) (   | (    )|   ) (   | (   ) || (      ')
-    print('   | |   | (___) ||  (_/ / | (__          | |   | (___) || (__          | |   | (____)|   | |   | (___) || |      ')
-    print('   | |   |  ___  ||   _ (  |  __)         | |   |  ___  ||  __)         | |   |     __)   | |   |  ___  || |      ')
-    print('   | |   | (   ) ||  ( \ \ | (            | |   | (   ) || (            | |   | (\ (      | |   | (   ) || |      ')
-    print("   | |   | )   ( ||  /  \ \| (____/\      | |   | )   ( || (____/\      | |   | ) \ \_____) (___| )   ( || (____/\ ")
-    print('   )_(   |/     \||_/    \/(_______/      )_(   |/     \|(_______/      )_(   |/   \__/\_______/|/     \|(_______/')
-    print('')
+    print('''
+    _________ _______  _        _______    _________          _______    _________ _______ _________ _______  _       
+    \__   __/(  ___  )| \    /\(  ____ \   \__   __/|\     /|(  ____ \   \__   __/(  ____ )\__   __/(  ___  )( \      
+       ) (   | (   ) ||  \  / /| (    \/      ) (   | )   ( || (    \/      ) (   | (    )|   ) (   | (   ) || (      
+       | |   | (___) ||  (_/ / | (__          | |   | (___) || (__          | |   | (____)|   | |   | (___) || |      
+       | |   |  ___  ||   _ (  |  __)         | |   |  ___  ||  __)         | |   |     __)   | |   |  ___  || |      
+       | |   | (   ) ||  ( \ \ | (            | |   | (   ) || (            | |   | (\ (      | |   | (   ) || |      
+       | |   | )   ( ||  /  \ \| (____/\      | |   | )   ( || (____/\      | |   | ) \ \_____) (___| )   ( || (____/\ 
+       )_(   |/     \||_/    \/(_______/      )_(   |/     \|(_______/      )_(   |/   \__/\_______/|/     \|(_______/
+    ''')
 
 
 # function to start the game
@@ -186,7 +186,7 @@ def room_1():
 
 
 room = Room()
-player1 = Player
+player1 = Player()
 game_start()
 room_1()
 

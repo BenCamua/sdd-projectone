@@ -27,22 +27,33 @@ class Player:
             print("There's nothing to use! ")
 
     def drop_item(self):
-        if len(self.inventory) > 1:
+        if len(self.inventory) >= 1:
+            counter = 0
+            print('What Item do you want to drop?')
             for l in self.inventory:
-                x = 0
-                x += 1
-                x = str(x)
-                print('What Item do you want to drop?')
-                print(x + ') ' + l)
-        userChoice = int(input(''))
-        if 0 < userChoice <= len(self.inventory):
-            del self.inventory[userChoice - 1]
-            print(self.inventory[1])
-            room.add_dropped(self.inventory[userChoice])
+                counter = int(counter)
+                counter += 1
+                counter = str(counter)
+                print(counter + ') ' + l)
+            userChoice = int(input(''))
+            if 0 < userChoice <= len(self.inventory):   # all '-1''s in the if statement are for indexing
+                room.add_dropped(self.inventory[userChoice - 1])
+                print(self.inventory[userChoice - 1] + ' has been dropped.')
+                del self.inventory[userChoice - 1]
+            else:
+                print("There's nothing there")
+        else:
+            print('There is nothing to drop!')
 
 
 class Table:
     items = ["Brass Key", "Red Potion"]
+
+    def check_table(self):
+        if len(self.items) > 0:
+            return 1
+        else:
+            return 0
 
     def take_key(self):
         keyIndex = self.items.index('Brass Key')
@@ -73,6 +84,12 @@ class Room:
     def picked_up(self, item):
         index = self.dropped.index(item)
         del self.dropped[index]
+
+    def room_check(self):
+        if len(self.dropped) > 0:
+            return 1
+        else:
+            return 0
 
 
 # ASCII title art
@@ -126,7 +143,7 @@ def room_1():
     print('')
 
     loop = 1
-    dagger = 0
+    firsttime = 1
     while loop == 1:
         userChoice = 0
         print('')
@@ -139,33 +156,26 @@ def room_1():
         userChoice = input("")
 # Dagger pickup prompt
         if userChoice == '1':
-            if dagger == 0:
+            if firsttime == 1:
                 print('You look around the various cabinets, dressers and crates around the room,')
                 print('you do not find anything of interest except a Silver Orcish Dagger hanging ')
                 print('from the wall.')
                 x = input('Do you take it? \n 1) Yes \n 2) No\n')
                 if x == '1':
-                    player1.add_inventory("Orchish Dagger")
+                    player1.add_inventory("Orcish Dagger")
                     print('Item Added, Orcish Dagger')
-                    dagger = 1
+                    firsttime = 0
                 elif x == '2':
                     print('You leave the dagger on the wall.')
                     print('')
-            elif dagger == 2:
-                print('You trip over the dagger that you dropped earlier.')
-                x2 = input('Do you take it? \n 1) Yes \n 2) No\n')
-                if x2 == '1':
-                    player1.add_inventory("Orchish Dagger")
-                    print('Item Added, Orcish Dagger')
-                    dagger = 1
-                elif x2 == '2':
-                    print('You leave the dagger on the floor')
-                    print('')
             else:
-                print('')
-                print("The room looks like it's part of a wooden lodge. There is a table with various items on it and ")
-                print("a wooden door with a lock.")
-                print('')
+                if room.room_check() == 0:
+                    print('')
+                    print("The room looks like it's part of a wooden lodge. There is a table with various items on it ")
+                    print("and a wooden door with a lock.")
+                    print('')
+                #else:
+                    #YOU HAVE TO DO THE PRINT EVERYTHING ON THE FLOOR THINGO
 # Open inventory prompt
         elif userChoice == '2':
             player1.check_inventory()
@@ -174,15 +184,17 @@ def room_1():
         table = Table()
         if userChoice == '3':
             table.show_table()
-            take = input('Do you take the Key? \n1) Yes\n2) No\n')
-            print('')
-            if take == '1':
-                print('You took the Key! ')
-                player1.add_inventory("Brass key")
-                table.take_key()
-
-            else:
-                print('You leave the key on the table')
+            if table.check_table() == 1:
+                take = input('Do you take the Key and the Red potion? \n1) Yes\n2) No\n')
+                print('')
+                if take == '1':
+                    print('Items Added')
+                    player1.add_inventory("Brass key")
+                    player1.add_inventory("Red Potion")
+                    table.take_key()
+                    table.take_pot()
+                else:
+                    print('You leave them on the table')
 
 
 room = Room()

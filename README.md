@@ -11,3 +11,20 @@ A decent commit, just did some coding in the morning, managed to finish and fix 
 
 Most recent commit is not functioning [TypeError: name_player() missing 1 required positional argument: 'self'] is not working.
 3/20/2018 1:16PM
+
+EXAM BLOCK DONE, time to work on the project again. The above issue was fixed and a lot of the code has now been put into functions. So a recap on what has been completed.
+1) All text till for room 1 (will be refined and made pretty at the end)
+2) choice 2, the inventory is working beautifully (use item choice is defaulted to do nothing, will be implemented)
+3) choice 3, the table is functioning perfectly and i doubt much will change about it.
+4) choice 1, is partially completed, Look around needs to work with player inventory and room inventory.
+
+What needs to be done.
+1) ROOM 2
+2) Combat and Battle logic
+3) game ending sequence
+4) Cleaning up of intrinsic annotation
+5) Cleaning up of text and prints
+6) Debugging and playtest
+
+How much time?
+1) Not a lot.                 10:42 AM 04/06/18

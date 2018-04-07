@@ -76,7 +76,9 @@ class Table:
 
 
 class Room:
-    dropped = []
+
+    def __init__(self):
+        self.dropped = []
 
     def add_dropped(self, item):
         self.dropped.append(item)
@@ -84,6 +86,11 @@ class Room:
     def picked_up(self, item):
         index = self.dropped.index(item)
         del self.dropped[index]
+
+    def picked_up_multiple(self, item):
+        for eachitem in item:  #BROKEN BROKEN BROKEN
+            index = self.dropped.index(eachitem)
+            del self.dropped[index]
 
     def room_check(self):
         if len(self.dropped) > 0:
@@ -174,8 +181,24 @@ def room_1():
                     print("The room looks like it's part of a wooden lodge. There is a table with various items on it ")
                     print("and a wooden door with a lock.")
                     print('')
-                #else:
-                    #YOU HAVE TO DO THE PRINT EVERYTHING ON THE FLOOR THINGO
+                else:
+                    if len(room.dropped) == 1:
+                        print('You trip over an item that you previously dropped.')
+                        print('1)' + room.dropped[0])
+                        take = input('\nDo you pick it up?\n1) Yes\n2) No\n')
+                        if take == '1':
+                            print(room.dropped[0] + ' added to inventory.')
+                            player1.add_inventory(room.dropped[0])
+                            room.picked_up(room.dropped[0])
+                    else:
+                        print('You find a few items that you dropped onto the floor.')
+                        print(room.dropped)
+                        pickup = input('\nDo you pick them up?\n1) Yes\n2) No\n')
+                        if pickup == '1':
+                            player1.add_inventory(room.dropped)
+                            print('Items added')        #BROKEN BROKEN BROKEN
+                            room.picked_up_multiple(room.dropped)
+
 # Open inventory prompt
         elif userChoice == '2':
             player1.check_inventory()

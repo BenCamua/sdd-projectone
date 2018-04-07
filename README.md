@@ -27,6 +27,8 @@ What needs to be done.
 6) Debugging and playtest
 
 How much time?
-1) Not a lot.                 10:42 AM 06/04/18
+1) Not a lot. ] 10:42 AM 06/04/18
 
-A bit more progress on finsihing up room 1. Only thing left now is to clean up text, to fix the picking up multiple items that were dropped consistently and also the door to the next room. I'm thinking of removing the use item function for room 1 because there is no need for it. bu there will be a need for it in room2. Anyways, I look to Complete room 1 by today and get planning and working on room 2.                            1:34 AM 07/04/18            
+A bit more progress on finsihing up room 1. Only thing left now is to clean up text, to fix the picking up multiple items that were dropped consistently and also the door to the next room. I'm thinking of removing the use item function for room 1 because there is no need for it. bu there will be a need for it in room2. Anyways, I look to Complete room 1 by today and get planning and working on room 2. 1:34 AM 07/04/18            
+
+Room one is very near completion all that left now is to decide whether to allow player to use the potion in room1 and to build the door that will let the player move to room2. All of intrinsic annotations has been completed as well as cleaning up of code and of what appears up on terminal. Full report of what is done according to the Project outline coming soon.  6:11 PM 07/04/18

@@ -64,18 +64,18 @@ class Player:
     def attack(self, type):
         if 'Orcish Dagger' in self.equipped:
             if type == 'LIGHT':
-                dmg = random.choice(1, 3, 1, 1, 2, 2)
+                dmg = random.uniform(1, 3)
             else:
-                dmg = random.choice(0, 0, 1, 2, 2, 0, 1, 3, 7)
+                dmg = random.uniform(0, 5)
             if dmg == 7:
                 print('You land a critical strike!!')
             grue.hurt(dmg)
 
         else:
             if type == 'PUNCH':
-                dmg = random.choice(0, 2, 1, 0, 1, 1)
+                dmg = random.uniform(1, 2)
             else:
-                dmg = random.choice(0, 0, 1, 2, 2, 1, 0, 2, 6)
+                dmg = random.uniform(0, 4)
             if dmg == 6:
                 print('You land a critical strike!!')
             grue.hurt(dmg)
@@ -89,9 +89,49 @@ class Player:
     def equip_and_use(self):
         print('What item do you want to use or equip?')
         print("Type 'Close' to close this menu.\n")
-        choice = input(self.inventory)
-        if choice == 'Close':
-            
+        loop = 1
+        while loop == 1:
+            choice = input(self.inventory)
+            if choice == 'Close':
+                loop = 0
+            elif choice == "Orcish Dagger":
+                if 'Orcish Dagger' in self.inventory:
+                    if "Orcish Dagger" not in self.equipped:
+                        print('Dagger equipped')
+                        self.equipped.append('Orcish Dagger')
+                    else:
+                        print('You already have that equipped')
+                else:
+                    print('You do not have that item')
+            elif choice == "Red Potion":
+                if 'Red Potion' in self.inventory:
+                    print('You drank the potion')
+                    self.health = self.health + 20
+                    if self.health > 100:
+                        excess = self.health - 100
+                        self.health = self.health - excess
+                    print('You now have ' + self.health + 'health!')
+                else:
+                    print('You do not have that item')
+            elif choice == "Brass Key":
+                if "Brass Key" in self.inventory:
+                    print('You cannot use that item right now!')
+                else:
+                    print('You do not have that item')
+
+    def stat_readout(self):
+        currenthealth = str(self.health)
+        attack = str(self.equipped)
+        print('=========================== The Player ===========================')
+        print('HEALTH: ' + currenthealth)
+        print('ATTACK: ' + attack)
+        print('                                                                  ')
+        if self.health > 50:
+            print('                     You stand tall and brave                     ')
+        else:
+            print("                 Your stance is faltering                         ")
+        print('                                                                  ')
+        print('==================================================================')
 
 
 # This is the Table class, it has an inventory and also the necessary functions to interact with it.
@@ -184,7 +224,7 @@ class Grue:
         if self.health > 5:
             print('                   It stares menacingly at you                    ')
         else:
-            print("                  It's gaze is faltering                          ")
+            print("                  Its gaze is faltering                          ")
         print('                                                                  ')
         print('==================================================================')
 
@@ -329,10 +369,17 @@ def battle():
         print('1) Attack\n2) Use and Item\n3) View your Stats\n4) Inspect the Grue')
         choice = input('')
         if choice == '1':
-            grue.attack()
+            player1.attack('Heavy')
         elif choice == '2':
-            print('Ch')
+            player1.equip_and_use()
+        elif choice == '3':
+            player1.stat_readout()
+        elif choice == '4':
+            grue.stat_readout()
 
+    print('The Grue should be dead.')
+    grue.stat_readout()
+    input('')
 
 table = Table()
 room = Room()

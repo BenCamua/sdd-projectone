@@ -1,3 +1,4 @@
+import random
 
 
 # This is the player class, The player will have a health, a name and also an inventory.
@@ -7,6 +8,13 @@ class Player:
         self.health = 100
         self.name = ''
         self.inventory = []
+        self.equipped = []
+
+    def check_alive(self):
+        if self.health <= 0:
+            return 0
+        else:
+            return 1
 
     def name_player(self):  # This function names the player
         self.name = input('\nEnter your name? ')
@@ -47,6 +55,43 @@ class Player:
                 print("\nThere's nothing there")
         else:
             print('There is nothing to drop!')
+
+    def hurt(self, dmg):
+        self.health = self.health - dmg
+        dmg = str(dmg)
+        print('You took ' + dmg + 'DMG.')
+
+    def attack(self, type):
+        if 'Orcish Dagger' in self.equipped:
+            if type == 'LIGHT':
+                dmg = random.choice(1, 3, 1, 1, 2, 2)
+            else:
+                dmg = random.choice(0, 0, 1, 2, 2, 0, 1, 3, 7)
+            if dmg == 7:
+                print('You land a critical strike!!')
+            grue.hurt(dmg)
+
+        else:
+            if type == 'PUNCH':
+                dmg = random.choice(0, 2, 1, 0, 1, 1)
+            else:
+                dmg = random.choice(0, 0, 1, 2, 2, 1, 0, 2, 6)
+            if dmg == 6:
+                print('You land a critical strike!!')
+            grue.hurt(dmg)
+
+    def equip(self, item):
+        if len(self.equipped) == 0:
+            self.equipped.append(item)
+        else:
+            print('Item already equipped')
+
+    def equip_and_use(self):
+        print('What item do you want to use or equip?')
+        print("Type 'Close' to close this menu.\n")
+        choice = input(self.inventory)
+        if choice == 'Close':
+            
 
 
 # This is the Table class, it has an inventory and also the necessary functions to interact with it.
@@ -96,6 +141,52 @@ class Room:
             return 1
         else:
             return 0
+
+
+class Grue:
+
+    def __init__(self):
+        self.health = 10
+
+    def check_alive(self):
+        if self.health <= 0:
+            return 0
+        else:
+            return 1
+
+    def attack(self):
+        dmg = random.choice(0, 0, 10, 10, 20, 30)
+        if dmg == 10:
+            print('The Grue slices at you but only manages to scrape you.')
+            player1.hurt(10)
+        elif dmg == 0:
+            print('The Grue stumbles and misses its swing at you.')
+            player1.hurt(0)
+        elif dmg == 20:
+            print('The Grue lunges forward and swipes at your chest.')
+            player1.hurt(20)
+        elif dmg == 30:
+            print('The Grue takes a quick stab and finds its mark on you.')
+            player1.hurt(30)
+
+    def hurt(self, dmg):
+        self.health = self.health - dmg
+        dmg = str(dmg)
+        print('The Grue took ' + dmg + ' damage!')
+
+    def stat_readout(self):
+        currenthealth = str(self.health)
+        print('============================ THE GRUE ============================')
+        print('HEALTH: ' + currenthealth)
+        print('DEFENSE: SHADOW ARMOUR, EXTREMELY RESISTANT TO PHYSICAL ATTACKS   ')
+        print('ATTACK: CLAWS OF DARKNESS, UNPREDICTABLE AND HAS A MIND OF ITS OWN')
+        print('                                                                  ')
+        if self.health > 5:
+            print('                   It stares menacingly at you                    ')
+        else:
+            print("                  It's gaze is faltering                          ")
+        print('                                                                  ')
+        print('==================================================================')
 
 
 # ASCII title art
@@ -185,30 +276,69 @@ def room_1():
 
 
 # Open inventory prompt
-        elif userChoice == '2':
+        if userChoice == '2':
             print('')
             player1.check_inventory()
 
 # Go to the table
-        table = Table()
         if userChoice == '3':
             table.show_table()
             if table.check_table() == 1:
-                take = input('\nDo you take the Key and the Red potion? \n1) Yes\n2) No\n')
+                take = input('Do you take the Key and the Red potion? \n1) Yes\n2) No\n')
                 print('')
                 if take == '1':
                     print('\nItems Added')
-                    player1.add_inventory("Brass key")
+                    player1.add_inventory("Brass Key")
                     player1.add_inventory("Red Potion")
                     table.take_key()
                     table.take_pot()
                 else:
                     print('\nYou leave them on the table')
 
+# Go to the LOCKED door
+        if userChoice == '4':
+            if "Brass Key" in player1.inventory:
+                print('\nYou approach the wooden door')
+                print('The door looks to be very sturdy and has a large brass lock.\n')
+                print('Do you use your Brass key to unlock the door?')
+                print('1) Yes\n2) No\n')
+                unlock = input('')
+                if unlock == '1':
+                    loop = 0
+            else:
+                print('\nYou approach the wooden door')
+                print('The door looks to be very sturdy and has a large brass lock.\n')
+                print('You will need a Key to open this door.')
 
+
+def room_2():
+
+    print('\nYou unlock the door and open it.')
+    print('This room follows the same decor as the previous. It is similarly sized with another metal table with a')
+    print('black glowing box with red inscriptions on it. As you approach the table the door behind you locks shut')
+    print('and the the box starts shaking violently. The lights in the room dim and the box morphs into what looks')
+    print('to be a Grue')
+    input('\nPress enter to start encounter...\n')
+    battle()
+
+
+def battle():
+    grue.stat_readout()
+    while grue.check_alive() and player1.check_alive() == 1:
+        print('What will you do?')
+        print('1) Attack\n2) Use and Item\n3) View your Stats\n4) Inspect the Grue')
+        choice = input('')
+        if choice == '1':
+            grue.attack()
+        elif choice == '2':
+            print('Ch')
+
+
+table = Table()
 room = Room()
 player1 = Player()
 game_start()
 room_1()
-
+grue = Grue()
+room_2()
 

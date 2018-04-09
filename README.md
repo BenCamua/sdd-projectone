@@ -34,3 +34,6 @@ A bit more progress on finsihing up room 1. Only thing left now is to clean up t
 Room one is very near completion all that left now is to decide whether to allow player to use the potion in room1 and to build the door that will let the player move to room2. All of intrinsic annotations has been completed as well as cleaning up of code and of what appears up on terminal. Full report of what is done according to the Project outline coming soon.  6:11 PM 07/04/18
 
 Room1 is done. Room2 is being worked on but the framework and logic is all laid out. Importing a random number generator and needs some adjustments for it to return int's instead of floats. The enemy mob can die and so can the player. Battle logic is working but crude. Refinement is all the is needed from this point onwards.  10:51PM 08/04/18
+
+Room 2 done, debug done, intrinsic code done. GAME DONE. 
+1:33 AM 10/04/18

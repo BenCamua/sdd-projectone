@@ -201,7 +201,7 @@ class Room:
 class Grue:
 
     def __init__(self):
-        self.health = 10
+        self.health = 15
 
     def check_alive(self):  # Returns a value that represents the current state of the mob, dead or alive
         if self.health <= 0:

@@ -9,12 +9,13 @@ class Player:
         self.name = ''
         self.inventory = []
         self.equipped = []
+        self.item_achievement = ''
 
     def check_alive(self):
         if self.health <= 0:
-            return 0
+            return 'DEAD'
         else:
-            return 1
+            return 'ALIVE'
 
     def name_player(self):  # This function names the player
         self.name = input('\nEnter your name? ')
@@ -45,40 +46,42 @@ class Player:
                 counter = str(counter)
                 print(counter + ') ' + l)
             print('')
-            userChoice = int(input(''))
-            if 0 < userChoice <= len(self.inventory):   # all '-1''s in the if statement are for indexing
-                room.add_dropped(self.inventory[userChoice - 1])
-                print('')
-                print(self.inventory[userChoice - 1] + ' has been dropped.')
-                del self.inventory[userChoice - 1]
+            userChoice = input('')
+            if userChoice.isnumeric():
+                userChoice = int(userChoice)
+                if 0 < userChoice <= len(self.inventory):   # all '-1''s in the if statement are for indexing
+                    room.add_dropped(self.inventory[userChoice - 1])
+                    print('')
+                    print(self.inventory[userChoice - 1] + ' has been dropped.')
+                    del self.inventory[userChoice - 1]
+                else:
+                    print("\nThere's nothing there")
             else:
-                print("\nThere's nothing there")
+                print('\nInvalid Input')
         else:
             print('There is nothing to drop!')
 
     def hurt(self, dmg):
+        print('')
         self.health = self.health - dmg
         dmg = str(dmg)
-        print('You took ' + dmg + 'DMG.')
+        print('You took ' + dmg + 'DMG.\n')
 
-    def attack(self, type):
+    def attack(self):
         if 'Orcish Dagger' in self.equipped:
-            if type == 'LIGHT':
-                dmg = random.uniform(1, 3)
-            else:
-                dmg = random.uniform(0, 5)
+            dmg = random.uniform(0, 5)
+            dmg = int(round(dmg))
             if dmg == 7:
                 print('You land a critical strike!!')
             grue.hurt(dmg)
 
         else:
-            if type == 'PUNCH':
-                dmg = random.uniform(1, 2)
-            else:
-                dmg = random.uniform(0, 4)
+            dmg = random.uniform(0, 4)
+            dmg = int(round(dmg))
             if dmg == 6:
                 print('You land a critical strike!!')
             grue.hurt(dmg)
+        return grue.check_alive()
 
     def equip(self, item):
         if len(self.equipped) == 0:
@@ -87,51 +90,58 @@ class Player:
             print('Item already equipped')
 
     def equip_and_use(self):
-        print('What item do you want to use or equip?')
+        print('\nWhat item do you want to use or equip?')
         print("Type 'Close' to close this menu.\n")
         loop = 1
         while loop == 1:
-            choice = input(self.inventory)
+            print(self.inventory)
+            print('')
+            choice = input('')
+            print('')
             if choice == 'Close':
                 loop = 0
             elif choice == "Orcish Dagger":
                 if 'Orcish Dagger' in self.inventory:
                     if "Orcish Dagger" not in self.equipped:
-                        print('Dagger equipped')
+                        print('Dagger equipped\n')
                         self.equipped.append('Orcish Dagger')
                     else:
-                        print('You already have that equipped')
+                        print('You already have that equipped\n')
                 else:
                     print('You do not have that item')
             elif choice == "Red Potion":
                 if 'Red Potion' in self.inventory:
                     print('You drank the potion')
-                    self.health = self.health + 20
+                    self.health = int(self.health) + 20
+                    index = self.inventory.index('Red Potion')
+                    del self.inventory[index]
                     if self.health > 100:
                         excess = self.health - 100
                         self.health = self.health - excess
-                    print('You now have ' + self.health + 'health!')
+                    print('You now have ' + str(self.health) + ' Health!\n')
                 else:
                     print('You do not have that item')
             elif choice == "Brass Key":
                 if "Brass Key" in self.inventory:
-                    print('You cannot use that item right now!')
+                    print('You cannot use that item right now!\n')
                 else:
-                    print('You do not have that item')
+                    print('You do not have that item\n')
 
     def stat_readout(self):
         currenthealth = str(self.health)
         attack = str(self.equipped)
-        print('=========================== The Player ===========================')
+        inventory = str(self.inventory)
+        print('\n=========================== ' + self.name +' ===========================')
         print('HEALTH: ' + currenthealth)
         print('ATTACK: ' + attack)
+        print('INVENTORY: ' + inventory)
         print('                                                                  ')
         if self.health > 50:
             print('                     You stand tall and brave                     ')
         else:
             print("                 Your stance is faltering                         ")
         print('                                                                  ')
-        print('==================================================================')
+        print('==================================================================\n')
 
 
 # This is the Table class, it has an inventory and also the necessary functions to interact with it.
@@ -144,7 +154,7 @@ class Table:
         else:
             return 0
 
-    def take_key(self): # This removes the Brass Key from the Table's inventory
+    def take_key(self):  # This removes the Brass Key from the Table's inventory
         keyIndex = self.items.index('Brass Key')
         del self.items[keyIndex]
 
@@ -190,33 +200,29 @@ class Grue:
 
     def check_alive(self):
         if self.health <= 0:
-            return 0
+            return 'DEAD'
         else:
-            return 1
+            return 'ALIVE'
 
     def attack(self):
-        dmg = random.choice(0, 0, 10, 10, 20, 30)
-        if dmg == 10:
+        print('')
+        dmg = random.uniform(10, 25)
+        if dmg <= 15:
             print('The Grue slices at you but only manages to scrape you.')
-            player1.hurt(10)
-        elif dmg == 0:
-            print('The Grue stumbles and misses its swing at you.')
-            player1.hurt(0)
-        elif dmg == 20:
-            print('The Grue lunges forward and swipes at your chest.')
-            player1.hurt(20)
-        elif dmg == 30:
+        elif dmg >= 20:
             print('The Grue takes a quick stab and finds its mark on you.')
-            player1.hurt(30)
+        else:
+            print('The Grue lunges forward and swipes at your chest.')
+        player1.hurt(int(round(dmg)))
 
     def hurt(self, dmg):
         self.health = self.health - dmg
         dmg = str(dmg)
-        print('The Grue took ' + dmg + ' damage!')
+        print('\nThe Grue took ' + dmg + ' damage!\n')
 
     def stat_readout(self):
         currenthealth = str(self.health)
-        print('============================ THE GRUE ============================')
+        print('\n============================ THE GRUE ============================')
         print('HEALTH: ' + currenthealth)
         print('DEFENSE: SHADOW ARMOUR, EXTREMELY RESISTANT TO PHYSICAL ATTACKS   ')
         print('ATTACK: CLAWS OF DARKNESS, UNPREDICTABLE AND HAS A MIND OF ITS OWN')
@@ -226,7 +232,7 @@ class Grue:
         else:
             print("                  Its gaze is faltering                          ")
         print('                                                                  ')
-        print('==================================================================')
+        print('==================================================================\n')
 
 
 # ASCII title art
@@ -248,7 +254,7 @@ def game_start():
     # Creates The Player
     title_art()
     print('\n\nA blinding white light fills your vision as the trials begin. ')
-    print('Your vision takes a while to adjust but the familiar sterile smell')
+    print('Your vision takes a while to adjust and the familiar sterile smell')
     print('of a dentist fills your nose. ')
     print('')
     print('You find yourself in a cuboid room with nothing but the cold')
@@ -283,7 +289,7 @@ def room_1():
             if firsttime == 1:  # firstTime is to detect if the dagger on the wall
                 print('\nYou look around the various cabinets, dressers and crates around the room,')
                 print('you do not find anything of interest except a Silver Orcish Dagger hanging ')
-                print('from the wall.')
+                print('from the wall.\n')
                 x = input('Do you take it? \n 1) Yes \n 2) No\n\n')
                 if x == '1':
                     player1.add_inventory("Orcish Dagger")
@@ -317,7 +323,7 @@ def room_1():
 
 # Open inventory prompt
         if userChoice == '2':
-            print('')
+            print(' ')
             player1.check_inventory()
 
 # Go to the table
@@ -351,6 +357,11 @@ def room_1():
                 print('You will need a Key to open this door.')
 
 
+def score_updater():
+    if len(player1.inventory) == 3:
+        player1.item_achievement = 'ACHIEVED'
+
+
 def room_2():
 
     print('\nYou unlock the door and open it.')
@@ -360,16 +371,19 @@ def room_2():
     print('to be a Grue')
     input('\nPress enter to start encounter...\n')
     battle()
+    ending_seq()
 
 
 def battle():
     grue.stat_readout()
-    while grue.check_alive() and player1.check_alive() == 1:
+    while grue.check_alive() == player1.check_alive():
         print('What will you do?')
-        print('1) Attack\n2) Use and Item\n3) View your Stats\n4) Inspect the Grue')
+        print('1) Attack\n2) Use and Item\n3) View your Stats\n4) Inspect the Grue\n')
         choice = input('')
         if choice == '1':
-            player1.attack('Heavy')
+            gruestate = player1.attack()
+            if gruestate == 'ALIVE':
+                grue.attack()
         elif choice == '2':
             player1.equip_and_use()
         elif choice == '3':
@@ -377,15 +391,32 @@ def battle():
         elif choice == '4':
             grue.stat_readout()
 
-    print('The Grue should be dead.')
-    grue.stat_readout()
+
+def ending_seq():
+    score = 0
+    if grue.check_alive() == 'DEAD':
+        score += 100
+    if player1.item_achievement == 'ACHIEVED':
+        score += 30
+    score += player1.health
+    if grue.check_alive() == 'DEAD':
+        print('The Grue crumbles after your last attack. Its face deforms and melts back into the box that it morphed')
+        print('out as. The rooms light goes out and the moons light from a window to your left dims to blackness.')
+        print('After a while, your back where it all started.\n')
+    else:
+        print('You collapse under the might of the Grue. Your vision blackens as it opens its jaws to consume you.')
+        print('After a while, your back where it all started.\n')
+    print('GAME COMPLETED')
+    print('YOUR HIGH SCORE: ' + str(score))
     input('')
+
 
 table = Table()
 room = Room()
 player1 = Player()
 game_start()
 room_1()
+score_updater()
 grue = Grue()
 room_2()
 

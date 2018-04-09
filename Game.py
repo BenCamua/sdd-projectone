@@ -1,7 +1,10 @@
 import random
 
 
-# This is the player class, The player will have a health, a name and also an inventory.
+# This is the player class, The player will have:
+# HEALTH
+# NAME
+# INVENTORY
 class Player:
 
     def __init__(self):
@@ -11,7 +14,7 @@ class Player:
         self.equipped = []
         self.item_achievement = ''
 
-    def check_alive(self):
+    def check_alive(self):  # Returns a value representing if the player is currently alive or dead.
         if self.health <= 0:
             return 'DEAD'
         else:
@@ -47,7 +50,7 @@ class Player:
                 print(counter + ') ' + l)
             print('')
             userChoice = input('')
-            if userChoice.isnumeric():
+            if userChoice.isnumeric():  # This prevents the code from breaking after invalid input
                 userChoice = int(userChoice)
                 if 0 < userChoice <= len(self.inventory):   # all '-1''s in the if statement are for indexing
                     room.add_dropped(self.inventory[userChoice - 1])
@@ -61,21 +64,21 @@ class Player:
         else:
             print('There is nothing to drop!')
 
-    def hurt(self, dmg):
+    def hurt(self, dmg):    # This will subtract the int that was passed into the function from the health.
         print('')
         self.health = self.health - dmg
         dmg = str(dmg)
         print('You took ' + dmg + 'DMG.\n')
 
-    def attack(self):
-        if 'Orcish Dagger' in self.equipped:
+    def attack(self):   # This will output a damage value to the grue mob dependant on the equipped items of the player
+        if 'Orcish Dagger' in self.equipped:    # with a dagger
             dmg = random.uniform(0, 5)
             dmg = int(round(dmg))
             if dmg == 7:
                 print('You land a critical strike!!')
             grue.hurt(dmg)
 
-        else:
+        else:   # without
             dmg = random.uniform(0, 4)
             dmg = int(round(dmg))
             if dmg == 6:
@@ -83,13 +86,13 @@ class Player:
             grue.hurt(dmg)
         return grue.check_alive()
 
-    def equip(self, item):
+    def equip(self, item):  # equips a passed in item, if already equipped, will print text.
         if len(self.equipped) == 0:
             self.equipped.append(item)
         else:
             print('Item already equipped')
 
-    def equip_and_use(self):
+    def equip_and_use(self):    # The interface the user interacts with to equip an item
         print('\nWhat item do you want to use or equip?')
         print("Type 'Close' to close this menu.\n")
         loop = 1
@@ -101,7 +104,7 @@ class Player:
             if choice == 'Close':
                 loop = 0
             elif choice == "Orcish Dagger":
-                if 'Orcish Dagger' in self.inventory:
+                if 'Orcish Dagger' in self.inventory:   # equips the weapon
                     if "Orcish Dagger" not in self.equipped:
                         print('Dagger equipped\n')
                         self.equipped.append('Orcish Dagger')
@@ -109,7 +112,7 @@ class Player:
                         print('You already have that equipped\n')
                 else:
                     print('You do not have that item')
-            elif choice == "Red Potion":
+            elif choice == "Red Potion":    # Uses the potion if there is a potion
                 if 'Red Potion' in self.inventory:
                     print('You drank the potion')
                     self.health = int(self.health) + 20
@@ -127,11 +130,11 @@ class Player:
                 else:
                     print('You do not have that item\n')
 
-    def stat_readout(self):
+    def stat_readout(self):  # prints out the current stats of the player
         currenthealth = str(self.health)
         attack = str(self.equipped)
         inventory = str(self.inventory)
-        print('\n=========================== ' + self.name +' ===========================')
+        print('\n=========================== ' + self.name + ' ===========================')
         print('HEALTH: ' + currenthealth)
         print('ATTACK: ' + attack)
         print('INVENTORY: ' + inventory)
@@ -174,37 +177,39 @@ class Table:
             print('There is nothing on the table.')
 
 
+# This class holds the inventory of the first room, and also provide functions to interact with it.
 class Room:
 
     def __init__(self):
         self.dropped = []
 
-    def add_dropped(self, item):
+    def add_dropped(self, item):    # adds an item to the rooms inventory
         self.dropped.append(item)
 
-    def picked_up(self, item):
+    def picked_up(self, item):  # removes an item from the rooms inventory
         index = self.dropped.index(item)
         del self.dropped[index]
 
-    def room_check(self):
+    def room_check(self):   # checks if there is anything in the room.
         if len(self.dropped) > 0:
             return 1
         else:
             return 0
 
 
+# This class contains the functions necessary for the mob to attack, get hurt and die.
 class Grue:
 
     def __init__(self):
         self.health = 10
 
-    def check_alive(self):
+    def check_alive(self):  # Returns a value that represents the current state of the mob, dead or alive
         if self.health <= 0:
             return 'DEAD'
         else:
             return 'ALIVE'
 
-    def attack(self):
+    def attack(self):   # allows for the mob to hurt the player.
         print('')
         dmg = random.uniform(10, 25)
         if dmg <= 15:
@@ -215,12 +220,12 @@ class Grue:
             print('The Grue lunges forward and swipes at your chest.')
         player1.hurt(int(round(dmg)))
 
-    def hurt(self, dmg):
+    def hurt(self, dmg):    # allows for the mob to be hurt by player
         self.health = self.health - dmg
         dmg = str(dmg)
         print('\nThe Grue took ' + dmg + ' damage!\n')
 
-    def stat_readout(self):
+    def stat_readout(self):  # prints out the stats of the mob
         currenthealth = str(self.health)
         print('\n============================ THE GRUE ============================')
         print('HEALTH: ' + currenthealth)
@@ -357,13 +362,12 @@ def room_1():
                 print('You will need a Key to open this door.')
 
 
-def score_updater():
+def score_updater():    # Solely for the achievement system that will add to the final score.
     if len(player1.inventory) == 3:
         player1.item_achievement = 'ACHIEVED'
 
 
-def room_2():
-
+def room_2():   # room2 logic and prints
     print('\nYou unlock the door and open it.')
     print('This room follows the same decor as the previous. It is similarly sized with another metal table with a')
     print('black glowing box with red inscriptions on it. As you approach the table the door behind you locks shut')
@@ -374,14 +378,14 @@ def room_2():
     ending_seq()
 
 
-def battle():
+def battle():   # Battle Logic
     grue.stat_readout()
     while grue.check_alive() == player1.check_alive():
         print('What will you do?')
         print('1) Attack\n2) Use and Item\n3) View your Stats\n4) Inspect the Grue\n')
         choice = input('')
         if choice == '1':
-            gruestate = player1.attack()
+            gruestate = player1.attack()    # important. Grue can only attack if its alive after attack.
             if gruestate == 'ALIVE':
                 grue.attack()
         elif choice == '2':
@@ -392,7 +396,7 @@ def battle():
             grue.stat_readout()
 
 
-def ending_seq():
+def ending_seq():   # END sequence. Adds up scores and prints out sum text.
     score = 0
     if grue.check_alive() == 'DEAD':
         score += 100
@@ -419,4 +423,3 @@ room_1()
 score_updater()
 grue = Grue()
 room_2()
-

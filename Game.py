@@ -11,8 +11,8 @@ class Player:
         self.health = 100
         self.name = ''
         self.inventory = []
-        self.equipped = []
-        self.item_achievement = ''
+        self.equipped = []  # this list will contain the items that are equipped onto the player
+        self.item_achievement = ''  # this is solely for the score system
 
     def check_alive(self):  # Returns a value representing if the player is currently alive or dead.
         if self.health <= 0:
@@ -30,16 +30,17 @@ class Player:
         print(self.name + "'s Inventory")
         print(self.inventory)
         print('\n1) Drop an Item')
-        print('2) Use an Item')
-        print('3) Close Inventory\n')
+        # print('2) Use an Item')
+        print('2) Close Inventory\n')
         choice = input('')
-        print('')
         if choice == '1':
             self.drop_item()
-        elif choice == '2':
-            print("There's nothing to use! ")
+        # elif choice == '2':     # this feature was not implemented due to a lack of necessity of it. Room 1 does not
+        # require or need to let the player use any items
+        #    print("There's nothing to use! ")
 
     def drop_item(self):  # This function removes items from the player's inventory and adds them to room's inventory
+        print('')
         if len(self.inventory) >= 1:
             counter = 0
             print('What Item do you want to drop?')
@@ -72,16 +73,16 @@ class Player:
 
     def attack(self):   # This will output a damage value to the grue mob dependant on the equipped items of the player
         if 'Orcish Dagger' in self.equipped:    # with a dagger
-            dmg = random.uniform(0, 5)
+            dmg = random.uniform(2, 5)
             dmg = int(round(dmg))
-            if dmg == 7:
+            if dmg == 5:
                 print('You land a critical strike!!')
             grue.hurt(dmg)
 
         else:   # without
             dmg = random.uniform(0, 4)
             dmg = int(round(dmg))
-            if dmg == 6:
+            if dmg == 4:
                 print('You land a critical strike!!')
             grue.hurt(dmg)
         return grue.check_alive()
@@ -115,11 +116,11 @@ class Player:
             elif choice == "Red Potion":    # Uses the potion if there is a potion
                 if 'Red Potion' in self.inventory:
                     print('You drank the potion')
-                    self.health = int(self.health) + 20
+                    self.health = int(self.health) + 35
                     index = self.inventory.index('Red Potion')
-                    del self.inventory[index]
+                    del self.inventory[index]   # removes the potion from the inventory once used
                     if self.health > 100:
-                        excess = self.health - 100
+                        excess = self.health - 100 # makes it so that the users health will not reach above 100
                         self.health = self.health - excess
                     print('You now have ' + str(self.health) + ' Health!\n')
                 else:
@@ -149,7 +150,9 @@ class Player:
 
 # This is the Table class, it has an inventory and also the necessary functions to interact with it.
 class Table:
-    items = ["Brass Key", "Red Potion"]
+    items = ["Brass Key", "Red Potion"]  # these items initially start on the table. An inventory for both items is not
+    # necessary as both items are taken of the table simultaneously and none can be put back on. This does allows for
+    # that to happen in the future.
 
     def check_table(self):  # This function returns a value depending if there is anything on the table.
         if len(self.items) > 0:
@@ -201,7 +204,7 @@ class Room:
 class Grue:
 
     def __init__(self):
-        self.health = 15
+        self.health = 13
 
     def check_alive(self):  # Returns a value that represents the current state of the mob, dead or alive
         if self.health <= 0:
@@ -276,7 +279,7 @@ def game_start():
 def room_1():
     print('\nThe paper disappears from the table and so does the light.')
     print("An uncomfortable amount of time passes and suddenly everything appears.")
-    print("Your now sat on a wooden chair in a new room. The room looks like it's")
+    print("You're now sat on a wooden chair in a new room. The room looks like it's")
     print('part of a wooden lodge. There is a table with various items on it and a')
     print('wooden door with a lock.')
 
@@ -296,36 +299,24 @@ def room_1():
                 print('you do not find anything of interest except a Silver Orcish Dagger hanging ')
                 print('from the wall.\n')
                 x = input('Do you take it? \n 1) Yes \n 2) No\n\n')
-                if x == '1':
+                if x == '1':    # player took it,
                     player1.add_inventory("Orcish Dagger")
                     print('\nItem Added, Orcish Dagger')
-                    firsttime = 0
+                    firsttime = 0   # dagger is no longer on the wall
                 elif x == '2':
                     print('\nYou leave the dagger on the wall.')
             else:
-                if room.room_check() == 0:
+                if room.room_check() == 0:  # room_check returns 0 if there is nothing in the room
                     print("\nThe room looks like it's part of a wooden lodge. There is a table with various items")
                     print(" on it and a wooden door with a lock.")
                 else:
-                    if len(room.dropped) == 1:
                         print('\nYou trip over an item that you previously dropped.')
                         print('1) ' + room.dropped[0])
                         take = input('\nDo you pick it up?\n1) Yes\n2) No\n')
                         if take == '1':
-                            print(room.dropped[0] + ' added to inventory.')
-                            player1.add_inventory(room.dropped[0])
-                            room.picked_up(room.dropped[0])
-                    else:
-                        print('You find a few items that you dropped onto the floor.')
-                        print(room.dropped)
-                        pickup = input('\nDo you pick them up?\n1) Yes\n2) No\n')
-                        if pickup == '1':
-                            for individualitems in room.dropped:
-                                index = room.dropped.index(individualitems)
-                                player1.add_inventory(room.dropped[index])
-                                room.picked_up(room.dropped[index])
-
-
+                            print(room.dropped[0] + ' added to inventory.')  # prints name of item that was picked up
+                            player1.add_inventory(room.dropped[0])  # adds item to inventory
+                            room.picked_up(room.dropped[0])  # removes item from the rooms inventory / the floor
 # Open inventory prompt
         if userChoice == '2':
             print(' ')
@@ -333,16 +324,16 @@ def room_1():
 
 # Go to the table
         if userChoice == '3':
-            table.show_table()
+            table.show_table()  # shows whats on the table
             if table.check_table() == 1:
-                take = input('Do you take the Key and the Red potion? \n1) Yes\n2) No\n')
                 print('')
+                take = input('Do you take the Key and the Red potion? \n1) Yes\n2) No\n')
                 if take == '1':
-                    print('\nItems Added')
+                    print('Items Added')
                     player1.add_inventory("Brass Key")
                     player1.add_inventory("Red Potion")
-                    table.take_key()
-                    table.take_pot()
+                    table.take_key()    # this could be shortened to take both items, but for the sake of future
+                    table.take_pot()    # proofing, is left as it is.
                 else:
                     print('\nYou leave them on the table')
 
@@ -355,7 +346,7 @@ def room_1():
                 print('1) Yes\n2) No\n')
                 unlock = input('')
                 if unlock == '1':
-                    loop = 0
+                    loop = 0  # loop = 0 as this will finish room 1 and start room 2
             else:
                 print('\nYou approach the wooden door')
                 print('The door looks to be very sturdy and has a large brass lock.\n')
@@ -363,7 +354,7 @@ def room_1():
 
 
 def score_updater():    # Solely for the achievement system that will add to the final score.
-    if len(player1.inventory) == 3:
+    if len(player1.inventory) == 3:     # all three items must be collected
         player1.item_achievement = 'ACHIEVED'
 
 
@@ -380,9 +371,9 @@ def room_2():   # room2 logic and prints
 
 def battle():   # Battle Logic
     grue.stat_readout()
-    while grue.check_alive() == player1.check_alive():
+    while grue.check_alive() == player1.check_alive():  # checks f both the player and the grue are alive
         print('What will you do?')
-        print('1) Attack\n2) Use and Item\n3) View your Stats\n4) Inspect the Grue\n')
+        print('1) Attack\n2) Use an Item\n3) View your Stats\n4) Inspect the Grue\n')
         choice = input('')
         if choice == '1':
             gruestate = player1.attack()    # important. Grue can only attack if its alive after attack.
@@ -415,11 +406,16 @@ def ending_seq():   # END sequence. Adds up scores and prints out sum text.
     input('')
 
 
+def main():    # this is my game
+    game_start()
+    room_1()
+    score_updater()
+    room_2()
+
+
+# these are my objects
 table = Table()
 room = Room()
 player1 = Player()
-game_start()
-room_1()
-score_updater()
 grue = Grue()
-room_2()
+main()
